@@ -12,7 +12,7 @@ public class ColorFileReader {
             in = new BufferedReader(new FileReader(filename));
             String str;
             while((str = in.readLine()) != null){
-                comboBoxModel.addElement(str.split(" ")[1]);
+                comboBoxModel.addElement(str);
             }
         } finally {
             in.close();

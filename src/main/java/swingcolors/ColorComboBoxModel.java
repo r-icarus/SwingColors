@@ -9,9 +9,10 @@ public class ColorComboBoxModel extends DefaultComboBoxModel implements MutableC
 
     @Override
     public void addElement(Object o) {
-        Color col;
+        NamedColor col;
         try{
-            col = Color.decode(o.toString());
+            String values[] = o.toString().split(" ");
+            col =new NamedColor(values[0],Color.decode(values[1]));
         }
             catch(NumberFormatException e){
             throw new UnsupportedOperationException(o + " not a color");

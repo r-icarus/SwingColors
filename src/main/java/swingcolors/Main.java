@@ -16,13 +16,13 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent actionEvent){
                 try{
-                    new ColorFileWriter().writeColorToFile((Color)ccb.getSelectedItem(),"chosen_color.txt");
+                    new ColorFileWriter().writeColorToFile((NamedColor)ccb.getSelectedItem(),"chosen_color.txt");
                 }catch (IOException e){
-                    JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.DEFAULT_OPTION);
                 }
             }
         });
-
+        ccb.setRenderer(new ColorComboBoxRenderer());
         panel.add(ccb, BorderLayout.CENTER);
         panel.add(saveButton, BorderLayout.SOUTH);
         JFrame frame = new JFrame("hello");
