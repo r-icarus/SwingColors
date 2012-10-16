@@ -1,5 +1,6 @@
 import org.junit.Test;
 import swingcolors.ColorComboBoxModel;
+import swingcolors.NamedColor;
 
 import javax.swing.*;
 import java.awt.Color;
@@ -10,18 +11,17 @@ public class ColorListModelTest {
 
     @Test
     public void testListOfColors(){
-
-        DefaultComboBoxModel lm = new ColorComboBoxModel();
-        lm.addElement("0xFF0000");
-        lm.addElement("0x0000FF");
+        ColorComboBoxModel lm = new ColorComboBoxModel();
+        lm.addElement("Red 0xFF0000");
+        lm.addElement("Blue 0x0000FF");
         assertEquals(2, lm.getSize());
-        assertEquals(Color.red, lm.getElementAt(0));
-        assertEquals(Color.blue, lm.getElementAt(1));
+        assertEquals(new NamedColor("Red",Color.red), lm.getElementAt(0));
+        assertEquals(new NamedColor("Blue",Color.blue), lm.getElementAt(1));
     }
 
     @Test
     public void testBadColors(){
-        DefaultComboBoxModel lm = new ColorComboBoxModel();
+        ColorComboBoxModel lm = new ColorComboBoxModel();
         try {
             lm.addElement("dsfdffsd");
             throw new AssertionError("should have barfed");

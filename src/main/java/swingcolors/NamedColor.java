@@ -19,4 +19,13 @@ public class NamedColor{
     public Color getCol() {
         return col;
     }
+
+    @Override
+    public boolean equals(Object o){
+        NamedColor other = (NamedColor)o;
+        if(this.getCol() != null && this.getName() != null && other != null)
+            return (this.getCol().equals(other.getCol()) && this.getName().equals(other.getName()));
+        else
+            return false;
+    }
 }

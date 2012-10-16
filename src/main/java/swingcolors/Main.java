@@ -8,21 +8,26 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        ColorComboBoxModel lm = new ColorFileReader().makeColorListModelFromFile("colors.txt");
-        final ColorComboBox ccb = new ColorComboBox(lm);
-        JPanel panel = new JPanel();
+        final ColorFileWriter colorFileWriter = new ColorFileWriter();
+        final ColorComboBoxModel ccbm = new ColorFileReader().makeColorListModelFromFile("colors.txt");
+        ColorComboBox ccb = new ColorComboBox(ccbm);
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent){
                 try{
-                    new ColorFileWriter().writeColorToFile((NamedColor)ccb.getSelectedItem(),"chosen_color.txt");
+                    NamedColor currentColor = (NamedColor)ccbm.getSelectedItem();
+                    if(currentColor != null){
+                        colorFileWriter.writeColorToFile(currentColor, "chosen_color.txt");
+                    }
                 }catch (IOException e){
                     JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.DEFAULT_OPTION);
                 }
             }
         });
-        ccb.setRenderer(new ColorComboBoxRenderer());
+        ColorComboBoxRenderer colorComboBoxRenderer = new ColorComboBoxRenderer();
+        ccb.setRenderer(colorComboBoxRenderer);
+        JPanel panel = new JPanel();
         panel.add(ccb, BorderLayout.CENTER);
         panel.add(saveButton, BorderLayout.SOUTH);
         JFrame frame = new JFrame("hello");
@@ -30,5 +35,6 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(panel);
         frame.setVisible(true);
+
     }
 }

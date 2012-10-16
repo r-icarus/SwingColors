@@ -1,13 +1,14 @@
 package swingcolors;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.*;
 
-public class ColorComboBoxModel extends DefaultComboBoxModel implements MutableComboBoxModel {
+public class ColorComboBoxModel extends AbstractListModel implements ComboBoxModel {
 
     private Object selectedItem;
+    private ArrayList<NamedColor> namedColors = new ArrayList<NamedColor>();
 
-    @Override
     public void addElement(Object o) {
         NamedColor col;
         try{
@@ -16,8 +17,10 @@ public class ColorComboBoxModel extends DefaultComboBoxModel implements MutableC
         }
             catch(NumberFormatException e){
             throw new UnsupportedOperationException(o + " not a color");
+        }catch(ArrayIndexOutOfBoundsException e){
+            throw new UnsupportedOperationException(o + " not a color");
         }
-        super.addElement(col);
+        namedColors.add(col);
     }
 
     public Object getSelectedItem(){
@@ -29,5 +32,13 @@ public class ColorComboBoxModel extends DefaultComboBoxModel implements MutableC
     }
 
 
+    @Override
+    public int getSize() {
+        return namedColors.size();
+    }
 
+    @Override
+    public Object getElementAt(int i) {
+        return namedColors.get(i);
+    }
 }

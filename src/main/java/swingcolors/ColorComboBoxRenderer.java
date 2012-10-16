@@ -22,6 +22,11 @@ public class ColorComboBoxRenderer extends JLabel implements ListCellRenderer {
             setBackground(list.getBackground());
             setForeground(list.getForeground());
         }
+        if (value == null) {
+            setText("No selection");
+            return this;
+        }
+
         JLabel label = new JLabel(selectedColor.getName(), new Icon() {
             @Override
             public void paintIcon(Component component, Graphics graphics, int x, int y) {
