@@ -1,40 +1,32 @@
 package swingcolors;
 
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoBuilder;
+import org.picocontainer.injectors.CompositeInjection;
+import org.picocontainer.injectors.ConstructorInjection;
+import org.picocontainer.injectors.MethodInjection;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        final ColorFileWriter colorFileWriter = new ColorFileWriter();
-        final ColorComboBoxModel ccbm = new ColorFileReader().makeColorListModelFromFile("colors.txt");
-        ColorComboBox ccb = new ColorComboBox(ccbm);
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent){
-                try{
-                    NamedColor currentColor = (NamedColor)ccbm.getSelectedItem();
-                    if(currentColor != null){
-                        colorFileWriter.writeColorToFile(currentColor, "chosen_color.txt");
-                    }
-                }catch (IOException e){
-                    JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.DEFAULT_OPTION);
-                }
-            }
-        });
-        ColorComboBoxRenderer colorComboBoxRenderer = new ColorComboBoxRenderer();
-        ccb.setRenderer(colorComboBoxRenderer);
-        JPanel panel = new JPanel();
-        panel.add(ccb, BorderLayout.CENTER);
-        panel.add(saveButton, BorderLayout.SOUTH);
+
+        MutablePicoContainer pico = new DefaultPicoContainer(new CompositeInjection(new ConstructorInjection(),
+                new MethodInjection("setRenderer")));
+        pico.addComponent(ColorComboBoxModel.class, new ColorFileReader().makeColorListModelFromFile("colors.txt"));
+        pico.addComponent(ColorFileWriter.class);
+        pico.addComponent(ColorComboBox.class);
+        pico.addComponent(ColorComboBoxRenderer.class);
+        pico.addComponent(ColorChoicePanel.class);
+
         JFrame frame = new JFrame("hello");
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(panel);
+        frame.add(pico.getComponent(ColorChoicePanel.class));
         frame.setVisible(true);
 
     }
+
 }
