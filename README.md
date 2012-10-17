@@ -1,4 +1,4 @@
 SwingColors
 ===========
 
-Learning Swing and Java Again
+Swing MVC example
