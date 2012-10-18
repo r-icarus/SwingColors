@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class ColorChoicePanel extends JPanel {
-    public ColorChoicePanel(ColorComboBox ccb, final ColorComboBoxModel ccbm, final ColorFileWriter colorFileWriter) {
+    public ColorChoicePanel(ColorComboBox ccb, final ColorComboBoxModel ccbm, final SelectedColorFileWriter colorFileWriter) {
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -15,7 +15,7 @@ public class ColorChoicePanel extends JPanel {
                 try{
                     NamedColor currentColor = (NamedColor) ccbm.getSelectedItem();
                     if(currentColor != null){
-                        colorFileWriter.writeColorToFile(currentColor, "chosen_color.txt");
+                        colorFileWriter.writeColorToFile(currentColor);
                     }
                 }catch (IOException e){
                     JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.DEFAULT_OPTION);
