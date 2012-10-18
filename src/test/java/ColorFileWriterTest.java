@@ -1,7 +1,6 @@
-import org.junit.*;
+import org.junit.Test;
 import swingcolors.ColorComboBoxModel;
-import swingcolors.ColorFileReader;
-import swingcolors.ColorFileWriter;
+import swingcolors.SelectedColorFileWriter;
 import swingcolors.NamedColor;
 
 import java.io.BufferedReader;
@@ -15,9 +14,9 @@ public class ColorFileWriterTest {
     @Test
     public void writing_one_color_to_file() throws IOException {
         String filename = "chosen_color.txt";
-        ColorComboBoxModel comboBoxModel = new ColorFileReader().makeColorListModelFromFile("colors.txt");
+        ColorComboBoxModel comboBoxModel = new ColorComboBoxModel("Red 0xFF0000\nBlue 0x0000FF\nGreen 0x00FF00");
         comboBoxModel.setSelectedItem(comboBoxModel.getElementAt(0));
-        new ColorFileWriter().writeColorToFile((NamedColor) comboBoxModel.getSelectedItem(),filename);
+        new SelectedColorFileWriter(filename).writeColorToFile((NamedColor) comboBoxModel.getSelectedItem());
         BufferedReader in = new BufferedReader(new FileReader(filename));
         String str = in.readLine();
         assertEquals(str,"Red 0xFF0000");
