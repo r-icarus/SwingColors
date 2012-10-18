@@ -23,13 +23,11 @@ public class Main {
         pico.addComponent(ColorComboBoxModel.class);
         pico.addComponent(ColorComboBoxRenderer.class);
         pico.addComponent(ColorChoicePanel.class);
+        pico.addComponent(ColorChoiceDialog.class);
 
-        JFrame frame = new JFrame("hello");
-        frame.setSize(300,200);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(pico.getComponent(ColorChoicePanel.class));
-        frame.setVisible(true);
-
+        JDialog dialog   = pico.getComponent(ColorChoiceDialog.class);
+        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
     }
 
 }

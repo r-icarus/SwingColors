@@ -11,6 +11,27 @@ public class ColorComboBoxRenderer extends JLabel implements ListCellRenderer {
         setVerticalAlignment(CENTER);
     }
 
+    public ColorComboBoxRenderer(final NamedColor color){
+        super(color.getName(), new Icon() {
+            @Override
+            public void paintIcon(Component component, Graphics graphics, int x, int y) {
+                graphics.setColor(color.getCol());
+                graphics.fillRect(x,y,getIconWidth(),getIconHeight());
+            }
+
+            @Override
+            public int getIconWidth() {
+                return 15;
+            }
+
+            @Override
+            public int getIconHeight() {
+                return 15;
+            }
+        }, SwingConstants.CENTER);
+
+    }
+
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -27,25 +48,8 @@ public class ColorComboBoxRenderer extends JLabel implements ListCellRenderer {
             return this;
         }
 
-        JLabel label = new JLabel(selectedColor.getName(), new Icon() {
-            @Override
-            public void paintIcon(Component component, Graphics graphics, int x, int y) {
-                graphics.setColor(selectedColor.getCol());
-                graphics.fillRect(x,y,getIconWidth(),getIconHeight());
-            }
-
-            @Override
-            public int getIconWidth() {
-                return 15;
-            }
-
-            @Override
-            public int getIconHeight() {
-                return 15;
-            }
-        }, SwingConstants.CENTER);
+        JLabel label = new ColorComboBoxRenderer(selectedColor);
         label.setPreferredSize(new Dimension(100,20));
-
         return label;
     }
 }
