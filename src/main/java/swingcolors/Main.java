@@ -25,7 +25,8 @@ public class Main {
         pico.change(Characteristics.USE_NAMES);
         pico.addConfig("defaultSelectedColor", new ColorComboBoxModel(new NamedAndHexColorsFromFileProvider("chosen_color.txt").provide()).getElementAt(0));
         pico.addConfig("selectedColorFileName", "chosen_color.txt");
-        pico.addAdapter(new NamedAndHexColorsFromFileProvider("colors.txt"));
+        pico.addConfig("namedAndHexColors",new NamedAndHexColorsFromFileProvider("colors.txt").provide());
+        //pico.addAdapter(new NamedAndHexColorsFromFileProvider("colors.txt"));
         pico.addComponent(SelectedColorFileWriter.class);
         pico.addComponent(ColorComboBox.class);
         pico.addComponent(ColorComboBoxModel.class);
