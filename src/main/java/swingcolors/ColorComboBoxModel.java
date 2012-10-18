@@ -8,14 +8,23 @@ public class ColorComboBoxModel extends AbstractListModel implements ComboBoxMod
 
     private Object selectedItem;
     private final ArrayList<NamedColor> namedColors = new ArrayList<NamedColor>();
+    ColorFrameModel crom;
 
-    public ColorComboBoxModel(String namedAndHexColors) {
-        for (String namedAndHexColor : namedAndHexColors.split("\n")) {
-            addElement(namedAndHexColor);
-        }
+    public ColorComboBoxModel(String namedAndHexColors){
+        addColorsAsElements(namedAndHexColors);
+    }
+
+    public ColorComboBoxModel(String namedAndHexColors, ColorFrameModel cfm) {
+        addColorsAsElements(namedAndHexColors);
+        this.crom = cfm;
+        setSelectedItem(cfm.getSelectedColor());
     }
 
     public ColorComboBoxModel() {
+    }
+
+    public void save() {
+        crom.setSelectedColor((NamedColor)getSelectedItem());
     }
 
     public void addElement(Object namedAndHexColor) {
@@ -48,5 +57,12 @@ public class ColorComboBoxModel extends AbstractListModel implements ComboBoxMod
     @Override
     public Object getElementAt(int i) {
         return namedColors.get(i);
+    }
+
+
+    private void addColorsAsElements(String namedAndHexColors){
+        for (String namedAndHexColor : namedAndHexColors.split("\n")) {
+            addElement(namedAndHexColor);
+        }
     }
 }

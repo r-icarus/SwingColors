@@ -1,28 +1,24 @@
 package swingcolors;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
 
 public class ColorChoicePanel extends JPanel {
-    public ColorChoicePanel(ColorComboBox ccb, final ColorComboBoxModel ccbm, final SelectedColorFileWriter colorFileWriter) {
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent){
-                try{
-                    NamedColor currentColor = (NamedColor) ccbm.getSelectedItem();
-                    if(currentColor != null){
-                        colorFileWriter.writeColorToFile(currentColor);
-                    }
-                }catch (IOException e){
-                    JOptionPane.showConfirmDialog(null,"Could not save file.","Error",JOptionPane.DEFAULT_OPTION);
-                }
-            }
-        });
+    private JButton okButton = new JButton("OK");
+    private JButton cancelButton = new JButton("Cancel");
+
+    public ColorChoicePanel(ColorComboBox ccb){
         this.add(ccb, BorderLayout.CENTER);
-        this.add(saveButton, BorderLayout.SOUTH);
+        this.add(okButton, BorderLayout.SOUTH);
+        this.add(cancelButton, BorderLayout.SOUTH);
+    }
+
+    public JButton getOkButton(){
+        return okButton;
+    }
+
+    public JButton setCancelButton(){
+        return cancelButton;
     }
 }
