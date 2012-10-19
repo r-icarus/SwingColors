@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*;
 public class ColorListModelTest {
 
     @Test
-    public void testListOfColors(){
+    public void test_list_of_colors(){
 
         ColorFrameModel mockCFM = mock(ColorFrameModel.class);
 
