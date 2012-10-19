@@ -6,20 +6,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class NamedAndHexColorsFromFileProvider extends ProviderAdapter {
+public class AbstractFromFileProvider extends ProviderAdapter {
 
-    private final String colorsTextFileName;
-
-    public NamedAndHexColorsFromFileProvider(String colorsTextFileName) {
-        this.colorsTextFileName = colorsTextFileName;
-    }
-
-    // TODO pass colorsTextFileName in here, rather than constructor
-    public String provide() throws IOException {
+    protected String getStringFromFile(String fileName) throws IOException {
         BufferedReader in = null;
         StringBuilder namedAndHexColors = new StringBuilder();
         try{
-            in = new BufferedReader(new FileReader(colorsTextFileName));
+            in = new BufferedReader(new FileReader(fileName));
             String str;
             while((str = in.readLine()) != null){
                 namedAndHexColors.append(str).append("\n");
@@ -31,5 +24,10 @@ public class NamedAndHexColorsFromFileProvider extends ProviderAdapter {
         }
 
         return namedAndHexColors.toString();
+    }
+
+    @Override
+    protected boolean useNames() {
+        return true;
     }
 }

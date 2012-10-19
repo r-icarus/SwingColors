@@ -2,6 +2,7 @@ package swingcolors;
 
 import org.picocontainer.Characteristics;
 import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.injectors.CompositeInjection;
 import org.picocontainer.injectors.ConstructorInjection;
@@ -16,27 +17,24 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        final DefaultPicoContainer pico = new DefaultPicoContainer(
+        final DefaultPicoContainer colorFrameContainer = new DefaultPicoContainer(
                 new Caching().wrap(
                         new CompositeInjection(new ConstructorInjection(),
                         new MethodInjection("setRenderer"))
                 )
         );
-        pico.change(Characteristics.USE_NAMES);
-        pico.addConfig("defaultSelectedColor", new ColorComboBoxModel(new NamedAndHexColorsFromFileProvider("chosen_color.txt").provide()).getElementAt(0));
-        pico.addConfig("selectedColorFileName", "chosen_color.txt");
-        pico.addConfig("namedAndHexColors",new NamedAndHexColorsFromFileProvider("colors.txt").provide());
-        //pico.addAdapter(new NamedAndHexColorsFromFileProvider("colors.txt"));
-        pico.addComponent(SelectedColorFileWriter.class);
-        pico.addComponent(ColorComboBox.class);
-        pico.addComponent(ColorComboBoxModel.class);
-        pico.addComponent(ColorFrameModel.class);
-        pico.addComponent(ColorComboBoxRenderer.class);
-        pico.addComponent(ColorChoicePanel.class);
-        pico.addComponent(ColorChoiceDialog.class);
-        pico.addComponent(ColorFrame.class);
+        colorFrameContainer.change(Characteristics.USE_NAMES);
 
-        final ColorFrame frame = pico.getComponent(ColorFrame.class);
+        colorFrameContainer.addConfig("selectedColorFileName", "chosen_color.txt");
+        colorFrameContainer.addConfig("colorsFileName", "colors.txt");
+        colorFrameContainer.addAdapter(new ColorsFromFileProvider());
+        colorFrameContainer.addAdapter(new SelectedColorFromFileProvider());
+        colorFrameContainer.addComponent(SelectedColorFileWriter.class);
+        colorFrameContainer.addComponent(ColorFrameModel.class);
+        colorFrameContainer.addComponent(ColorComboBoxRenderer.class);
+        colorFrameContainer.addComponent(ColorFrame.class);
+
+        final ColorFrame frame = colorFrameContainer.getComponent(ColorFrame.class);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
@@ -44,13 +42,19 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                final ColorChoiceDialog dialog = pico.getComponent(ColorChoiceDialog.class);
+                final MutablePicoContainer colorChoiceContainer = colorFrameContainer.makeChildContainer();
+                colorChoiceContainer.addComponent(ColorChoicePanel.class);
+                colorChoiceContainer.addComponent(ColorChoiceDialog.class);
+                colorChoiceContainer.addComponent(ColorComboBox.class);
+                colorChoiceContainer.addComponent(ColorComboBoxModel.class);
+
+                final ColorChoiceDialog dialog = colorChoiceContainer.getComponent(ColorChoiceDialog.class);
                 dialog.setVisible(true);
 
                 dialog.getPanel().getOkButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent){
-                        pico.getComponent(ColorComboBoxModel.class).save();
+                        colorChoiceContainer.getComponent(ColorComboBoxModel.class).save();
                         dialog.setVisible(false);
                         frame.refresh();
                     }
